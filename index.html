@@ -34,12 +34,6 @@
 </head>
 <body>
     <!--IMAGETARGETS-->
-		<imagetarget id='bear' src='targets/bear.png'></imagetarget>
-		<imagetarget id='bfly' src='targets/bfly.png'></imagetarget>
-		<imagetarget id='flower' src='targets/flower.png'></imagetarget>
-		<imagetarget id='lady' src='targets/lady.png'></imagetarget>
-		<imagetarget id='reel' src='targets/reel.png'></imagetarget>
-		<imagetarget id='rmn' src='targets/rmn.png'></imagetarget>
 		<imagetarget id='SI_BusinessCard_Generic' src='targets/SI_BusinessCard_Generic.png'></imagetarget>
 
     <video id="webcam-video" muted autoplay playsinline style="width:1px;position:absolute"></video>
@@ -101,31 +95,32 @@
             var loadingBar = document.querySelector("#unity-loading-bar");
             var progressBarFull = document.querySelector("#unity-progress-bar-full");
             function StartAR() {
-    canvas.style.width = window.innerWidth + "px";
-    canvas.style.height = window.innerHeight + "px";
-    
-    document.getElementById("startARDiv").style.display = "none";
-    createUnityInstance(document.querySelector("#unity-canvas"), {
-        dataUrl: "Build/AR_BusinessCard.data",
-        frameworkUrl: "Build/AR_BusinessCard.framework.js",
-        codeUrl: "Build/AR_BusinessCard.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "DefaultCompany",
-        productName: "Demo SI Business Card Unity Project",
-        productVersion: "0.1",
-    },
-    (progress) => {
-        progressBarFull.style.width = 100 * progress + "%";
-    }
-    ).then((unityInstance) => {
-        unityInstance.SetFullscreen(1); // This line sets the Unity instance to fullscreen mode.
-        window.unityInstance = unityInstance;
-        RequestWebcam(); // This function requests webcam access.
-        loadingBar.style.display = "none"; // Hides the loading bar after the instance is ready.
-    });
-    loadingBar.style.display = "block"; // Shows the loading bar while the instance is being prepared.
-}
-
+                canvas.style.width = window.innerWidth + "px";
+                canvas.style.height = window.innerHeight + "px";
+                
+                document.getElementById("startARDiv").style.display = "none";
+                createUnityInstance(document.querySelector("#unity-canvas"), {
+                    dataUrl: "Build/AR_BusinessCard.data",
+                    frameworkUrl: "Build/AR_BusinessCard.framework.js",
+                    codeUrl: "Build/AR_BusinessCard.wasm",
+                    streamingAssetsUrl: "StreamingAssets",
+                    companyName: "DefaultCompany",
+                    productName: "Demo SI Business Card Unity Project",
+                    productVersion: "0.1",
+                    //webglContextAttributes: { "preserveDrawingBuffer": true },
+                    // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+                    // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+                    },
+                    (progress) => {
+                        progressBarFull.style.width = 100 * progress + "%";
+                    }
+                ).then((unityInstance) => {
+                    window.unityInstance = unityInstance;
+                    RequestWebcam();
+                    loadingBar.style.display = "none";
+                });
+                loadingBar.style.display = "block";
+            }
             window.WEBCAM_SETTINGS = {
                 video: {
                     facingMode: "environment",
